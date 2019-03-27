@@ -1,0 +1,21 @@
+{
+  "name": "express-next-generator",
+  "version": "0.0.1",
+  "description": "CLI tool for initializing Express+Next.JS+React.JS SSR application.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "Rimvydas Zilinskas http://github.com/rimvydaszilinskas",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "figlet": "^1.2.1",
+    "inquirer": "^6.2.2"
+  },
+  "bin": {
+    "nextexpress": "./index.js"
+  }
+}
