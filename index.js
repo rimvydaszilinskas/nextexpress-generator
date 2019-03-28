@@ -73,6 +73,56 @@ inquirer.prompt(questions).then(answers => {
     `\t}\n` +
     '}';
 
+    const nextConfig = `const withCss = require('@zeit/next-css');
+module.exports = withCss();`;
+
+    const indexFile = `import Head from 'next/head';
+import React from 'react';
+
+class Index extends React.Component {
+    render() {
+        return (
+            <React.Fragment>
+                <Head>
+                    <title>${projectName}</title>
+                </Head>
+                <div>
+                    <h1>${projectName}</h1>
+                        <p>Hello world from ReactJS</p>
+                </div>
+            </React.Fragment>
+        )
+    }
+}
+        
+export default Index;`;
+
+    const serverFile = `const next = require('next');
+const express = require('express');
+
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({dev});
+const handle = app.getRequestHandler();
+    
+app.prepare().then(() => {
+    const server = express();
+
+    server.get("/", (req, res) => {
+        res.send("Hello world from NODE.JS");
+    });
+        
+    server.get("*", (req, res) => {
+        return handle(req, res);
+    });
+
+    server.listen(3000, (err) => {
+        if(err)
+            throw err;
+            console.log(\`Ready on http://localhost:3000\`)
+    });
+});
+`;
+
     countdown.message(`Creating the ${projectName} folder.`)
 
     fs.mkdir(`./${projectName}`, (err) => {
@@ -93,7 +143,7 @@ inquirer.prompt(questions).then(answers => {
             console.log(chalk.green(' - package.json generated'));
 
             countdown.message('Generating server.js');
-            fs.copyFile('./samples/server.js', `./${projectName}/server.js`, (err) => {
+            fs.writeFile(`./${projectName}/server.js`, serverFile, (err) => {
                 if(err){
                     countdown.stop();
                     console.log(chalk.red('Error generating server.js file! Now exiting...'));
@@ -102,7 +152,7 @@ inquirer.prompt(questions).then(answers => {
                 console.log(chalk.green(' - server.js generated'));      
                 
                 countdown.message('Configuring next.js');
-                fs.copyFile('./samples/next.config.js', `./${projectName}/next.config.js`, (err) => {
+                fs.writeFile(`./${projectName}/next.config.js`, nextConfig, (err) => {
                     if(err){
                         countdown.stop();
                         console.log(chalk.red('Error configuring next.js! Now exiting...'));
@@ -114,7 +164,7 @@ inquirer.prompt(questions).then(answers => {
                             console.log(chalk.red('Error configuring next.js! Now exiting...'));
                             process.exit(0);
                         }
-                        fs.copyFile('./samples/index.js', `./${projectName}/pages/index.js`, (err) => {
+                        fs.writeFile(`./${projectName}/pages/index.js`, indexFile,(err) => {
                             if(err){
                                 countdown.stop();
                                 console.log(chalk.red('Error configuring next.js! Now exiting...'));
