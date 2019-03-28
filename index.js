@@ -177,7 +177,7 @@ app.prepare().then(() => {
                             console.log('\n');
                             console.log(chalk.yellow('----- QUICK START -----'));
                             console.log(`1. cd ${projectName}`);
-                            console.log(`2. npm init`);
+                            console.log(`2. npm install`);
                             console.log(`3. npm run dev`);
                             console.log(`Then open http://localhost:3000 in your browser.`);
                             console.log('\n');
